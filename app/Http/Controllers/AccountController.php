@@ -146,4 +146,8 @@ class AccountController extends Controller
             ]);
         }
     }
+
+    public function createJob(){
+        return view('front.account.job.create');
+    }
 }
