@@ -2,12 +2,16 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\AllJobs;
 use App\Models\User;
+use App\Models\Category;
+use App\Models\JobType;
+use Hamcrest\Core\AllOf;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
-
+use PHPUnit\Util\PHP\Job;
 
 class AccountController extends Controller
 {
@@ -147,7 +151,132 @@ class AccountController extends Controller
         }
     }
 
-    public function createJob(){
-        return view('front.account.job.create');
+    public function createJob()
+    {
+        $categories = Category::orderBy('name', 'ASC')->where('status', 1)->get();
+        $jobTypes = JobType::orderBy('name', 'ASC')->where('status', 1)->get();
+        return view('front.account.job.create', [
+            'categories' => $categories,
+            'jobTypes' => $jobTypes,
+        ]);
+    }
+
+    public function saveJob(Request $request)
+    {
+        $rules = [
+            'title' => 'required|min:5|max:200',
+            'category' => 'required',
+            'jobType' => 'required',
+            'vacancy' => 'required|integer',
+            'location' => 'required|max:50',
+            'description' => 'required',
+            'company_name' => 'required|max:75|min:3',
+            'experience' => 'required',
+        ];
+
+        $validator = Validator::make($request->all(), $rules);
+
+        if ($validator->passes()) {
+            $data = new AllJobs();
+            $data->title  = $request->title;
+            $data->category_id  = $request->category;
+            $data->job_type_id  = $request->jobType;
+            $data->user_id  = Auth::user()->id;
+            $data->vacancy  = $request->vacancy;
+            $data->salary  = $request->salary;
+            $data->location  = $request->location;
+            $data->description  = $request->description;
+            $data->benefits  = $request->benefits;
+            $data->responsibility  = $request->responsibility;
+            $data->qualifications  = $request->qualifications;
+            $data->keywords  = $request->keywords;
+            $data->experience  = $request->experience;
+            $data->company_name  = $request->company_name;
+            $data->company_location  = $request->company_location;
+            $data->company_website  = $request->company_website;
+
+            $data->save();
+            Session()->flash('success', 'Job posted successfully.');
+            return response()->json([
+                'status' => true,
+                'errors' => []
+            ]);
+        } else {
+            return response()->json([
+                'status' => false,
+                'errors' => $validator->errors()
+            ]);
+        }
+    }
+
+
+    public function myJobs()
+    {
+        $jobs = AllJobs::where('user_id', Auth::user()->id)->with('jobType')->paginate(10);
+        return view('front.account.job.myjobs', [
+            'jobs' => $jobs
+        ]);
+    }
+    public function editJob($jobid)
+    {
+        $data['categories'] = Category::orderBy('name', 'ASC')->where('status', 1)->get();
+        $data['jobTypes'] = JobType::orderBy('name', 'ASC')->where('status', 1)->get();
+
+        $data['job'] = AllJobs::where([
+            'id' => $jobid,
+            'user_id' => Auth::user()->id,
+        ])->first();
+        if ($data['job'] == null) {
+            abort(404);
+        }
+        return view('front.account.job.edit', $data);
+    }
+
+    public function updateJob(Request $request, $id)
+    {
+        $rules = [
+            'title' => 'required|min:5|max:200',
+            'category' => 'required',
+            'jobType' => 'required',
+            'vacancy' => 'required|integer',
+            'location' => 'required|max:50',
+            'description' => 'required',
+            'company_name' => 'required|max:75|min:3',
+            'experience' => 'required',
+        ];
+
+        $validator = Validator::make($request->all(), $rules);
+
+        if ($validator->passes()) {
+            $data = AllJobs::find($id);
+            $data->title  = $request->title;
+            $data->category_id  = $request->category;
+            $data->job_type_id  = $request->jobType;
+            $data->user_id  = Auth::user()->id;
+            $data->vacancy  = $request->vacancy;
+            $data->salary  = $request->salary;
+            $data->location  = $request->location;
+            $data->description  = $request->description;
+            $data->benefits  = $request->benefits;
+            $data->responsibility  = $request->responsibility;
+            $data->qualifications  = $request->qualifications;
+            $data->keywords  = $request->keywords;
+            $data->experience  = $request->experience;
+            $data->company_name  = $request->company_name;
+            $data->company_location  = $request->company_location;
+            $data->company_website  = $request->company_website;
+
+            $data->save();
+            Session()->flash('success', 'Job Updated successfully.');
+            return response()->json([
+                'status' => true,
+                'errors' => []
+            ]);
+        } else {
+            return response()->json([
+                'status' => false,
+                'errors' => $validator->errors()
+            ]);
+        }
     }
 }

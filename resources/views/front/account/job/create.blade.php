@@ -17,10 +17,12 @@
                     @include('front.account.sidebar')
                 </div>
                 <div class="col-lg-9">
-                    @include('front.message')
 
                <form action=""method="post"id="createJobForm" name="createJobForm">
+            
                      <div class="card border-0 shadow mb-4 ">
+                        @include('front.message')
+
                         <div class="card-body card-form p-4">
                             <h3 class="fs-4 mb-1">Job Details</h3>
                             <div class="row">
@@ -28,33 +30,40 @@
                                     <label for="" class="mb-2">Title<span class="req">*</span></label>
                                     <input type="text" placeholder="Job Title" id="title" name="title"
                                         class="form-control">
+                                        <p></p>
                                 </div>
                                 <div class="col-md-6  mb-4">
                                     <label for="" class="mb-2">Category<span class="req">*</span></label>
                                     <select name="category" id="category" class="form-control">
                                         <option value="">Select a Category</option>
-                                        <option value="">Engineering</option>
-                                        <option value="">Accountant</option>
-                                        <option value="">Information Technology</option>
-                                        <option value="">Fashion designing</option>
+                                        @if($categories->isNotEmpty())
+                                            @foreach ($categories as $item)
+                                            <option value="{{$item->id}}">{{$item->name}}</option>                                               
+                                            @endforeach
+                                        @endif                                
                                     </select>
+                                    <p></p>
                                 </div>
                             </div>
 
                             <div class="row">
                                 <div class="col-md-6 mb-4">
                                     <label for="" class="mb-2">Job Nature<span class="req">*</span></label>
-                                    <select class="form-select">
-                                        <option>Full Time</option>
-                                        <option>Part Time</option>
-                                        <option>Remote</option>
-                                        <option>Freelance</option>
+                                    <select class="form-select"name="jobType" id="jobType">
+                                        @if($jobTypes->isNotEmpty())
+                                        <option value="">Select Type</option>
+                                            @foreach ($jobTypes as $item)
+                                            <option value="{{$item->id}}">{{$item->name}}</option>                                               
+                                            @endforeach
+                                        @endif     
                                     </select>
+                                    <p></p>
                                 </div>
                                 <div class="col-md-6  mb-4">
                                     <label for="" class="mb-2">Vacancy<span class="req">*</span></label>
                                     <input type="number" min="1" placeholder="Vacancy" id="vacancy" name="vacancy"
                                         class="form-control">
+                                        <p></p>
                                 </div>
                             </div>
 
@@ -67,8 +76,9 @@
 
                                 <div class="mb-4 col-md-6">
                                     <label for="" class="mb-2">Location<span class="req">*</span></label>
-                                    <input type="text" placeholder="location" id="location" name="Location"
+                                    <input type="text" placeholder="location" id="location" name="location"
                                         class="form-control">
+                                        <p></p>
                                 </div>
                             </div>
 
@@ -76,6 +86,7 @@
                                 <label for="" class="mb-2">Description<span class="req">*</span></label>
                                 <textarea class="form-control" name="description" id="description" cols="5" rows="5"
                                     placeholder="Description"></textarea>
+                                    <p></p>
                             </div>
                             <div class="mb-4">
                                 <label for="" class="mb-2">Benefits</label>
@@ -92,10 +103,29 @@
                                     placeholder="Qualifications"></textarea>
                             </div>
 
+                            <div class="col-md-6 mb-4">
+                                <label for="" class="mb-2" >Experience <span class="req">*</span></label>
+                                   <select  class="form-select"name="experience" id="experience">
+                                    <option value="1">1 Year</option>
+                                    <option value="2">2 Year</option>
+                                    <option value="3">3 Year</option>
+                                    <option value="4">4 Year</option>
+                                    <option value="5">5 Year</option>
+                                    <option value="6">6 Year</option>
+                                    <option value="7">7 Year</option>
+                                    <option value="8">8 Year</option>
+                                    <option value="9">9 Year</option>
+                                    <option value="10">10 Year</option>
+                                    <option value="10_plus">10+ Years</option>
+                                </select>
+
+                            <p></p>
+                            </div>
+
 
 
                             <div class="mb-4">
-                                <label for="" class="mb-2">Keywords<span class="req">*</span></label>
+                                <label for="" class="mb-2">Keywords</label>
                                 <input type="text" placeholder="keywords" id="keywords" name="keywords"
                                     class="form-control">
                             </div>
@@ -107,23 +137,24 @@
                                     <label for="" class="mb-2">Name<span class="req">*</span></label>
                                     <input type="text" placeholder="Company Name" id="company_name"
                                         name="company_name" class="form-control">
+                                        <p></p>
                                 </div>
 
                                 <div class="mb-4 col-md-6">
                                     <label for="" class="mb-2">Location</label>
-                                    <input type="text" placeholder="Location" id="location" name="location"
+                                    <input type="text" placeholder="Location" id="location" name="company_location"
                                         class="form-control">
                                 </div>
                             </div>
 
                             <div class="mb-4">
                                 <label for="" class="mb-2">Website</label>
-                                <input type="text" placeholder="Website" id="website" name="website"
+                                <input type="url" placeholder="Website" id="website" name="company_website"
                                     class="form-control">
                             </div>
                         </div>
                         <div class="card-footer  p-4">
-                            <button type="button" class="btn btn-primary">Save Job</button>
+                            <button type="submit" class="btn btn-primary">Save Job</button>
                         </div>
                     </div>
 
@@ -137,50 +168,124 @@
 
 @section('customJs')
     <script>
-        $("#userForm").submit(function(e) {
+        $("#createJobForm").submit(function(e) {
             e.preventDefault();
+            // $("button[type='submit']").prop(disabled, true);
 
             $.ajax({
-                url: '{{ route('account.updateProfile') }}',
-                type: 'put',
-                data: $("#userForm").serializeArray(),
+                url: '{{ route('account.saveJob') }}',
+                type: 'post',
+                data: $("#createJobForm").serializeArray(),
                 dataType: "json",
                 success: function(response) {
+                    // $("button[type='submit']").prop(disabled, false);
                     if (response.status === false) {
                         var errors = response.errors;
 
                         // Name Field
-                        if (errors.name) {
-                            $("#name").addClass('is-invalid')
+                        if (errors.title) {
+                            $("#title").addClass('is-invalid')
                                 .siblings('p')
                                 .addClass('invalid-feedback')
-                                .html(errors.name);
+                                .html(errors.title);
                         } else {
-                            $("#name").removeClass('is-invalid')
+                            $("#title").removeClass('is-invalid')
                                 .siblings('p')
                                 .removeClass('invalid-feedback')
                                 .html('');
                         }
 
-                        // Email Field
-                        if (errors.email) {
-                            $("#email").addClass('is-invalid')
+                        // Category Field
+                        if (errors.category) {
+                            $("#category").addClass('is-invalid')
                                 .siblings('p')
                                 .addClass('invalid-feedback')
-                                .html(errors.email);
+                                .html(errors.category);
                         } else {
-                            $("#email").removeClass('is-invalid')
+                            $("#category").removeClass('is-invalid')
+                                .siblings('p')
+                                .removeClass('invalid-feedback')
+                                .html('');
+                        }
+                        // jobType Field
+                        if (errors.jobType) {
+                            $("#jobType").addClass('is-invalid')
+                                .siblings('p')
+                                .addClass('invalid-feedback')
+                                .html(errors.jobType);
+                        } else {
+                            $("#jobType").removeClass('is-invalid')
+                                .siblings('p')
+                                .removeClass('invalid-feedback')
+                                .html('');
+                        }
+                        // vacancy Field
+                        if (errors.vacancy) {
+                            $("#vacancy").addClass('is-invalid')
+                                .siblings('p')
+                                .addClass('invalid-feedback')
+                                .html(errors.vacancy);
+                        } else {
+                            $("#vacancy").removeClass('is-invalid')
+                                .siblings('p')
+                                .removeClass('invalid-feedback')
+                                .html('');
+                        }
+                        // location Field
+                        if (errors.location) {
+                            $("#location").addClass('is-invalid')
+                                .siblings('p')
+                                .addClass('invalid-feedback')
+                                .html(errors.location);
+                        } else {
+                            $("#location").removeClass('is-invalid')
+                                .siblings('p')
+                                .removeClass('invalid-feedback')
+                                .html('');
+                        }
+                        // description Field
+                        if (errors.description) {
+                            $("#description").addClass('is-invalid')
+                                .siblings('p')
+                                .addClass('invalid-feedback')
+                                .html(errors.description);
+                        } else {
+                            $("#description").removeClass('is-invalid')
+                                .siblings('p')
+                                .removeClass('invalid-feedback')
+                                .html('');
+                        }
+                        // experience Field
+                        if (errors.experience) {
+                            $("#experience").addClass('is-invalid')
+                                .siblings('p')
+                                .addClass('invalid-feedback')
+                                .html(errors.experience);
+                        } else {
+                            $("#experience").removeClass('is-invalid')
+                                .siblings('p')
+                                .removeClass('invalid-feedback')
+                                .html('');
+                        }
+                        // company_name Field
+                        if (errors.company_name) {
+                            $("#company_name").addClass('is-invalid')
+                                .siblings('p')
+                                .addClass('invalid-feedback')
+                                .html(errors.company_name);
+                        } else {
+                            $("#company_name").removeClass('is-invalid')
                                 .siblings('p')
                                 .removeClass('invalid-feedback')
                                 .html('');
                         }
                     } else {
                         // Clear all fields when no errors exist
-                        $("#name, #email").removeClass('is-invalid')
+                        $("#title,#category, #jobType, #vacancy, #location, #description, #company_name").removeClass('is-invalid')
                             .siblings('p')
                             .removeClass('invalid-feedback')
                             .html('');
-                        window.location.href = '{{ route('account.profile') }}';
+                        window.location.href = '{{ route('account.myJobs') }}';
 
                     }
                 }

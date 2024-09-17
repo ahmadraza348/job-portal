@@ -1,10 +1,14 @@
 <?php
 
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\AccountController;
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
+Route::get('/hash', function () {
+    return Hash::make('admin@gmail.com');
+});
 
 Route::prefix('account')->group(function () {
     
@@ -23,6 +27,10 @@ Route::prefix('account')->group(function () {
         Route::get('/logout', [AccountController::class, 'logout'])->name('account.logout');
         Route::post('/update-profile-pic', [AccountController::class, 'updateProfilePic'])->name('account.updateProfilePic');
         Route::get('/create-job', [AccountController::class, 'createJob'])->name('account.createJob');
+        Route::post('/save-job', [AccountController::class, 'saveJob'])->name('account.saveJob');
+        Route::get('/my-job', [AccountController::class, 'myJobs'])->name('account.myJobs');
+        Route::get('/edit-job/{jobid}', [AccountController::class, 'editJob'])->name('account.editJob');
+        Route::post('/update-job/{jobid}', [AccountController::class, 'updateJob'])->name('account.updateJob');
     });
 
 });
