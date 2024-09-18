@@ -22,15 +22,16 @@ Route::prefix('account')->group(function () {
     
     // Authenticated Routes
     Route::middleware('auth')->group(function () {
+        Route::get('/my-job', [AccountController::class, 'myJobs'])->name('account.myJobs');
         Route::get('/profile', [AccountController::class, 'profile'])->name('account.profile');
         Route::put('/update-profile', [AccountController::class, 'updateProfile'])->name('account.updateProfile');
         Route::get('/logout', [AccountController::class, 'logout'])->name('account.logout');
         Route::post('/update-profile-pic', [AccountController::class, 'updateProfilePic'])->name('account.updateProfilePic');
         Route::get('/create-job', [AccountController::class, 'createJob'])->name('account.createJob');
         Route::post('/save-job', [AccountController::class, 'saveJob'])->name('account.saveJob');
-        Route::get('/my-job', [AccountController::class, 'myJobs'])->name('account.myJobs');
         Route::get('/edit-job/{jobid}', [AccountController::class, 'editJob'])->name('account.editJob');
         Route::post('/update-job/{jobid}', [AccountController::class, 'updateJob'])->name('account.updateJob');
+        Route::post('/delete-job', [AccountController::class, 'deleteJob'])->name('account.deleteJob');
     });
 
 });
