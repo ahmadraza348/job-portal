@@ -181,7 +181,8 @@
 
 
 @section('customJs')
-    <script>
+  <script>
+    $(document).ready(function() {
         $("#editJobForm").submit(function(e) {
             e.preventDefault();
             // $("button[type='submit']").prop(disabled, true);
@@ -299,11 +300,12 @@
                             .siblings('p')
                             .removeClass('invalid-feedback')
                             .html('');
-                        window.location.href = '{{ route('account.myJobs') }}';
-
-                    }
+                            
+                        }
+                        window.location.href = '{{ route("account.myJobs") }}';
                 }
             });
         });
+    });
     </script>
 @endsection

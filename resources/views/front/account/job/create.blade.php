@@ -167,7 +167,8 @@
 
 
 @section('customJs')
-    <script>
+<script>
+    $(document).ready(function() {
         $("#createJobForm").submit(function(e) {
             e.preventDefault();
             // $("button[type='submit']").prop(disabled, true);
@@ -291,5 +292,6 @@
                 }
             });
         });
+    });
     </script>
 @endsection
