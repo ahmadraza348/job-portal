@@ -293,8 +293,10 @@ class AccountController extends Controller
                 'error' => 'Job not found or already deleted'
             ]);
         }
-    
+
         $job->delete();
+                    Session()->flash('success', 'Job Deleted successfully.');
+
             return response()->json([
             'status' => true,
             'success' => 'Job deleted successfully'

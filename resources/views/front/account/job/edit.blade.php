@@ -181,131 +181,131 @@
 
 
 @section('customJs')
-  <script>
-    $(document).ready(function() {
-        $("#editJobForm").submit(function(e) {
-            e.preventDefault();
-            // $("button[type='submit']").prop(disabled, true);
-            $.ajax({
-                url: '{{ route('account.updateJob', $job->id) }}',
-                type: 'post',
-                data: $("#editJobForm").serializeArray(),
-                dataType: "json",
-                success: function(response) {
-                    // $("button[type='submit']").prop(disabled, true);
-                    if (response.status === false) {
-                        var errors = response.errors;
+    <script>
+        $(document).ready(function() {
+            $("#editJobForm").submit(function(e) {
+                e.preventDefault();
+                // $("button[type='submit']").prop(disabled, true);
+                $.ajax({
+                    url: '{{ route('account.updateJob',$job->id) }}',
+                    type: 'post',
+                    data: $("#editJobForm").serializeArray(),
+                    dataType: "json",
+                    success: function(response) {
+                        // $("button[type='submit']").prop(disabled, true);
+                        if (response.status === false) {
+                            var errors = response.errors;
 
-                        // Name Field
-                        if (errors.title) {
-                            $("#title").addClass('is-invalid')
-                                .siblings('p')
-                                .addClass('invalid-feedback')
-                                .html(errors.title);
-                        } else {
-                            $("#title").removeClass('is-invalid')
-                                .siblings('p')
-                                .removeClass('invalid-feedback')
-                                .html('');
-                        }
+                            // Name Field
+                            if (errors.title) {
+                                $("#title").addClass('is-invalid')
+                                    .siblings('p')
+                                    .addClass('invalid-feedback')
+                                    .html(errors.title);
+                            } else {
+                                $("#title").removeClass('is-invalid')
+                                    .siblings('p')
+                                    .removeClass('invalid-feedback')
+                                    .html('');
+                            }
 
-                        // Category Field
-                        if (errors.category) {
-                            $("#category").addClass('is-invalid')
-                                .siblings('p')
-                                .addClass('invalid-feedback')
-                                .html(errors.category);
+                            // Category Field
+                            if (errors.category) {
+                                $("#category").addClass('is-invalid')
+                                    .siblings('p')
+                                    .addClass('invalid-feedback')
+                                    .html(errors.category);
+                            } else {
+                                $("#category").removeClass('is-invalid')
+                                    .siblings('p')
+                                    .removeClass('invalid-feedback')
+                                    .html('');
+                            }
+                            // jobType Field
+                            if (errors.jobType) {
+                                $("#jobType").addClass('is-invalid')
+                                    .siblings('p')
+                                    .addClass('invalid-feedback')
+                                    .html(errors.jobType);
+                            } else {
+                                $("#jobType").removeClass('is-invalid')
+                                    .siblings('p')
+                                    .removeClass('invalid-feedback')
+                                    .html('');
+                            }
+                            // vacancy Field
+                            if (errors.vacancy) {
+                                $("#vacancy").addClass('is-invalid')
+                                    .siblings('p')
+                                    .addClass('invalid-feedback')
+                                    .html(errors.vacancy);
+                            } else {
+                                $("#vacancy").removeClass('is-invalid')
+                                    .siblings('p')
+                                    .removeClass('invalid-feedback')
+                                    .html('');
+                            }
+                            // location Field
+                            if (errors.location) {
+                                $("#location").addClass('is-invalid')
+                                    .siblings('p')
+                                    .addClass('invalid-feedback')
+                                    .html(errors.location);
+                            } else {
+                                $("#location").removeClass('is-invalid')
+                                    .siblings('p')
+                                    .removeClass('invalid-feedback')
+                                    .html('');
+                            }
+                            // description Field
+                            if (errors.description) {
+                                $("#description").addClass('is-invalid')
+                                    .siblings('p')
+                                    .addClass('invalid-feedback')
+                                    .html(errors.description);
+                            } else {
+                                $("#description").removeClass('is-invalid')
+                                    .siblings('p')
+                                    .removeClass('invalid-feedback')
+                                    .html('');
+                            }
+                            // experience Field
+                            if (errors.experience) {
+                                $("#experience").addClass('is-invalid')
+                                    .siblings('p')
+                                    .addClass('invalid-feedback')
+                                    .html(errors.experience);
+                            } else {
+                                $("#experience").removeClass('is-invalid')
+                                    .siblings('p')
+                                    .removeClass('invalid-feedback')
+                                    .html('');
+                            }
+                            // company_name Field
+                            if (errors.company_name) {
+                                $("#company_name").addClass('is-invalid')
+                                    .siblings('p')
+                                    .addClass('invalid-feedback')
+                                    .html(errors.company_name);
+                            } else {
+                                $("#company_name").removeClass('is-invalid')
+                                    .siblings('p')
+                                    .removeClass('invalid-feedback')
+                                    .html('');
+                            }
                         } else {
-                            $("#category").removeClass('is-invalid')
+                            // Clear all fields when no errors exist
+                            $("#title,#category, #jobType, #vacancy, #location, #description, #company_name")
+                                .removeClass('is-invalid')
                                 .siblings('p')
                                 .removeClass('invalid-feedback')
                                 .html('');
+                            window.location.href = '{{ route('account.myJobs') }}';
+
                         }
-                        // jobType Field
-                        if (errors.jobType) {
-                            $("#jobType").addClass('is-invalid')
-                                .siblings('p')
-                                .addClass('invalid-feedback')
-                                .html(errors.jobType);
-                        } else {
-                            $("#jobType").removeClass('is-invalid')
-                                .siblings('p')
-                                .removeClass('invalid-feedback')
-                                .html('');
-                        }
-                        // vacancy Field
-                        if (errors.vacancy) {
-                            $("#vacancy").addClass('is-invalid')
-                                .siblings('p')
-                                .addClass('invalid-feedback')
-                                .html(errors.vacancy);
-                        } else {
-                            $("#vacancy").removeClass('is-invalid')
-                                .siblings('p')
-                                .removeClass('invalid-feedback')
-                                .html('');
-                        }
-                        // location Field
-                        if (errors.location) {
-                            $("#location").addClass('is-invalid')
-                                .siblings('p')
-                                .addClass('invalid-feedback')
-                                .html(errors.location);
-                        } else {
-                            $("#location").removeClass('is-invalid')
-                                .siblings('p')
-                                .removeClass('invalid-feedback')
-                                .html('');
-                        }
-                        // description Field
-                        if (errors.description) {
-                            $("#description").addClass('is-invalid')
-                                .siblings('p')
-                                .addClass('invalid-feedback')
-                                .html(errors.description);
-                        } else {
-                            $("#description").removeClass('is-invalid')
-                                .siblings('p')
-                                .removeClass('invalid-feedback')
-                                .html('');
-                        }
-                        // experience Field
-                        if (errors.experience) {
-                            $("#experience").addClass('is-invalid')
-                                .siblings('p')
-                                .addClass('invalid-feedback')
-                                .html(errors.experience);
-                        } else {
-                            $("#experience").removeClass('is-invalid')
-                                .siblings('p')
-                                .removeClass('invalid-feedback')
-                                .html('');
-                        }
-                        // company_name Field
-                        if (errors.company_name) {
-                            $("#company_name").addClass('is-invalid')
-                                .siblings('p')
-                                .addClass('invalid-feedback')
-                                .html(errors.company_name);
-                        } else {
-                            $("#company_name").removeClass('is-invalid')
-                                .siblings('p')
-                                .removeClass('invalid-feedback')
-                                .html('');
-                        }
-                    } else {
-                        // Clear all fields when no errors exist
-                        $("#title,#category, #jobType, #vacancy, #location, #description, #company_name")
-                            .removeClass('is-invalid')
-                            .siblings('p')
-                            .removeClass('invalid-feedback')
-                            .html('');
-                            
-                        }
-                        window.location.href = '{{ route("account.myJobs") }}';
-                }
+                    }
+                });
             });
         });
-    });
     </script>
 @endsection

@@ -13,7 +13,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css" />
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/style.css') }}" />
     <!-- Fav Icon -->
-    <link rel="shortcut icon" type="image/x-icon" href="#" />
+    <link rel="shortcut icon" type="{{asset('image/x-icon')}}" href="#" />
 </head>
 
 <body data-instant-intensity="mousedown">
@@ -79,7 +79,7 @@
 
     <footer class="bg-dark py-3 bg-2">
         <div class="container">
-            <p class="text-center text-white pt-3 fw-bold fs-6">© 2023 xyz company, all right reserved</p>
+            <p class="text-center text-white pt-3 fw-bold fs-6">© 2023 Job, all right reserved</p>
         </div>
     </footer>
     <script src="{{ asset('assets/js/jquery-3.6.0.min.js') }}"></script>
@@ -125,7 +125,7 @@
 
         });
     </script>
-    @yield('customJs');
+    @yield('customJs')
 </body>
 
 </html>
