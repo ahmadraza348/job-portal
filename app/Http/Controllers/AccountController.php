@@ -212,7 +212,7 @@ class AccountController extends Controller
 
     public function myJobs()
     {
-        $jobs = AllJobs::where('user_id', Auth::user()->id)->with('jobType')->paginate(10);
+        $jobs = AllJobs::where('user_id', Auth::user()->id)->orderBy('created_at', 'DESC')->with('jobType')->paginate(10);
         return view('front.account.job.myjobs', [
             'jobs' => $jobs
         ]);
