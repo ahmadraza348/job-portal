@@ -10,12 +10,59 @@ use App\Http\Controllers\Controller;
 
 class JobController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $data['categories'] = Category::where('status' , 1)->get();
-        $data['jobtypes'] = JobType::where('status' , 1)->get();
-        $data['jobs'] = AllJobs::where(['status'=> 1])->with('jobType')->orderBy('created_at' , 'DESC')->paginate(9);
+        $categories = Category::where('status', 1)->get();
+        $jobtypes = JobType::where('status', 1)->get();
+        $jobs = AllJobs::where(['status' => 1]);
 
-        return view('front.job', $data);
+        // Search using keywords
+
+        if (!empty($request->keyword)) {
+            $jobs = $jobs->where(function ($query) use ($request) {
+                $query->orWhere('title', 'like', '%' . $request->keyword . '%');
+                $query->orWhere('keywords', 'like', '%' . $request->keyword . '%');
+            });
+        }
+        // Searxh using location
+        if (!empty($request->location)) {
+            $jobs = $jobs->where('location', $request->location);
+        }
+        // Searxh using category
+        if (!empty($request->category)) {
+            $jobs = $jobs->where('category_id', $request->category);
+        }
+        $jobTypeArray = [];
+        // Searxh using Job Type
+        if (!empty($request->jobType)) {
+            $jobTypeArray = explode(',' ,$request->jobType);
+            $jobs = $jobs->whereIn('job_type_id',  $jobTypeArray);
+        }
+         // Searxh using experience
+         if (!empty($request->experience)) {
+            $jobs = $jobs->where('experience', $request->experience);
+        }
+
+        $jobs =  $jobs->with(['jobType', 'category']);
+
+        if ($request->sort == 1) {
+            $jobs = $jobs->orderBy('created_at', 'ASC');
+        } elseif ($request->sort == 0) {
+            $jobs = $jobs->orderBy('created_at', 'DESC');
+        } else {
+            $jobs = $jobs->orderBy('created_at', 'DESC');
+        }
+        
+        $jobs =  $jobs->paginate(9);
+
+        return view('front.job', [
+            'categories'=>$categories,
+            'jobtypes'=>$jobtypes,
+           'jobs'=> $jobs,
+           'jobTypeArray'=>$jobTypeArray
+
+
+
+        ]);
     }
 }
