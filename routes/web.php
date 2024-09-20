@@ -8,6 +8,7 @@ use App\Http\Controllers\JobController;
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/jobs', [JobController::class, 'index'])->name('jobs');
+Route::get('/jobs-detail/{id}', [JobController::class, 'detail'])->name('jobsDetails');
 Route::get('/hash', function () {
     return Hash::make('admin@gmail.com');
 });

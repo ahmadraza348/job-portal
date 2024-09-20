@@ -35,11 +35,11 @@ class JobController extends Controller
         $jobTypeArray = [];
         // Searxh using Job Type
         if (!empty($request->jobType)) {
-            $jobTypeArray = explode(',' ,$request->jobType);
+            $jobTypeArray = explode(',', $request->jobType);
             $jobs = $jobs->whereIn('job_type_id',  $jobTypeArray);
         }
-         // Searxh using experience
-         if (!empty($request->experience)) {
+        // Searxh using experience
+        if (!empty($request->experience)) {
             $jobs = $jobs->where('experience', $request->experience);
         }
 
@@ -52,17 +52,26 @@ class JobController extends Controller
         } else {
             $jobs = $jobs->orderBy('created_at', 'DESC');
         }
-        
+
         $jobs =  $jobs->paginate(9);
 
         return view('front.job', [
-            'categories'=>$categories,
-            'jobtypes'=>$jobtypes,
-           'jobs'=> $jobs,
-           'jobTypeArray'=>$jobTypeArray
+            'categories' => $categories,
+            'jobtypes' => $jobtypes,
+            'jobs' => $jobs,
+            'jobTypeArray' => $jobTypeArray
+        ]);
+    }
 
 
-
+    public function detail($id)
+    {
+        $detail = AllJobs::where([
+            'id' => $id,
+            'status' => 1
+        ])->with(['jobType', 'category'])->first();
+        return view('front.detail', [
+            'detail' => $detail,
         ]);
     }
 }
